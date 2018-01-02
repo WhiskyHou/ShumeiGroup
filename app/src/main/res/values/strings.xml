@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Zhihu</string>
+    <string name="signin">登 录</string>
+    <string name="signup">注 册</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
