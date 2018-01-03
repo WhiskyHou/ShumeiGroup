@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -18,6 +19,9 @@ public class AskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ask);
+
+        EditText title = (EditText) findViewById(R.id.ask_title);
+        EditText content = (EditText) findViewById(R.id.ask_content);
 
         Button post = (Button) findViewById(R.id.ask_post);
         post.setOnClickListener(new View.OnClickListener() {
