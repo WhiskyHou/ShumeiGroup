@@ -25,7 +25,9 @@
         </activity>
         <activity android:name=".HomeActivity" />
         <activity android:name=".SettingActivity" />
-        <activity android:name=".TestActivity"></activity>
+        <activity android:name=".SearchActivity" />
+        <activity android:name=".AnswerActivity" />
+        <activity android:name=".AskActivity"></activity>
     </application>
 
 </manifest>

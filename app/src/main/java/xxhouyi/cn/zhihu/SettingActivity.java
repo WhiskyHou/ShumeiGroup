@@ -24,10 +24,18 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
+        Intent intent = getIntent();
+        User user = (User) intent.getSerializableExtra("userinfo");
+
         final EditText name_t = (EditText) findViewById(R.id.text_name_set);
         final EditText phone_t = (EditText) findViewById(R.id.text_phone_set);
         final EditText introduction_t = (EditText) findViewById(R.id.text_introduction_set);
         final EditText school_t = (EditText) findViewById(R.id.text_school_set);
+
+        name_t.setText(user.name);
+        phone_t.setText(user.phone);
+        introduction_t.setText(user.introduce);
+        school_t.setText(user.school);
 
         Button button = (Button) findViewById(R.id.check_set);
         button.setOnClickListener(new View.OnClickListener() {

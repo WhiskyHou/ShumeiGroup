@@ -1,7 +1,10 @@
 package xxhouyi.cn.zhihu;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -31,17 +34,15 @@ public class HomeActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private List<Question> questionList = new ArrayList<>();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-//        initQuestionList();
-//        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-//        LinearLayoutManager manager = new LinearLayoutManager(this);
-//        QuestionAdapter adapter = new QuestionAdapter(questionList);
-//        recyclerView.setAdapter(adapter);
+
+
 
         //android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
@@ -75,11 +76,26 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        initQuestionList();
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(manager);
+        QuestionAdapter adapter = new QuestionAdapter(questionList);
+        recyclerView.setAdapter(adapter);
+
         Button ask = (Button) findViewById(R.id.home_ask);
         ask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this, TestActivity.class);
+                Intent intent = new Intent(HomeActivity.this, AskActivity.class);
+                startActivity(intent);
+            }
+        });
+        Button search = (Button) findViewById(R.id.home_search);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
                 startActivity(intent);
             }
         });
@@ -129,31 +145,52 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void setting(){
+        User user = null;
+        String path= Environment.getExternalStorageDirectory().getAbsolutePath()+"/userinfo.dat";
+        ObjectInputStream ois = null;
+        File file = new File(path);
+        if (file.exists()) {
+            try {
+                ois = new ObjectInputStream(new FileInputStream(file));
+                user = (User) ois.readObject();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (ois != null) {
+                        ois.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         Intent intent = new Intent(HomeActivity.this, SettingActivity.class);
+        intent.putExtra("userinfo", user);
         startActivity(intent);
     }
 
     private void initQuestionList(){
         for (int i = 0; i < 2; ++i){
-            Question q1 = new Question(R.drawable.head1, "OKjson", "请问一下这个法线贴图怎么弄", "null");
+            Question q1 = new Question(1, R.drawable.head1, "OKjson", "请问一下这个法线贴图怎么弄", "null");
             questionList.add(q1);
-            Question q2 = new Question(R.drawable.head2, "jack-wang", "后天的作业可不可以晚点交，谁知道最后期限啊", "null");
+            Question q2 = new Question(2, R.drawable.head2, "jack-wang", "后天的作业可不可以晚点交，谁知道最后期限啊", "null");
             questionList.add(q2);
-            Question q3 = new Question(R.drawable.head3, "Liuwangshu", "有人能帮我看一下这段代码么，一直报错编译不通过", "null");
+            Question q3 = new Question(3, R.drawable.head3, "Liuwangshu", "有人能帮我看一下这段代码么，一直报错编译不通过", "null");
             questionList.add(q3);
-            Question q4 = new Question(R.drawable.head4, "马师傅", "如何评价北工大软件学院的一群光头夜不归宿的现象", "null");
+            Question q4 = new Question(4, R.drawable.head4, "马师傅", "如何评价北工大软件学院的一群光头夜不归宿的现象", "null");
             questionList.add(q4);
-            Question q5 = new Question(R.drawable.head5, "balabala2333", "下周的体侧有人能帮忙跑一下800么，根据速度下面有详细的红包金额", "null");
+            Question q5 = new Question(5, R.drawable.head5, "balabala2333", "下周的体侧有人能帮忙跑一下800么，根据速度下面有详细的红包金额", "null");
             questionList.add(q5);
-            Question q6 = new Question(R.drawable.head6, "橘子花", "谁帮我做俩期末大作业", "null");
+            Question q6 = new Question(6, R.drawable.head6, "橘子花", "谁帮我做俩期末大作业", "null");
             questionList.add(q6);
-            Question q7 = new Question(R.drawable.head7, "pkkls", "周末有人去604么", "null");
+            Question q7 = new Question(7, R.drawable.head7, "pkkls", "周末有人去604么", "null");
             questionList.add(q7);
-            Question q8 = new Question(R.drawable.head8, "不如喝茶", "下学期的课都怎么报，还有各类课都要多少学分啊", "null");
+            Question q8 = new Question(8, R.drawable.head8, "不如喝茶", "下学期的课都怎么报，还有各类课都要多少学分啊", "null");
             questionList.add(q8);
-            Question q9 = new Question(R.drawable.head9, "圈子官方", "你2017年的最后一行代码是什么", "null");
+            Question q9 = new Question(9, R.drawable.head9, "圈子官方", "你2017年的最后一行代码是什么", "null");
             questionList.add(q9);
-            Question q10 = new Question(R.drawable.head10, "80s", "谁有放假的具体安排，要订票了……", "null");
+            Question q10 = new Question(10, R.drawable.head10, "80s", "谁有放假的具体安排，要订票了……", "null");
             questionList.add(q10);
         }
     }
